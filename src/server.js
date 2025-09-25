@@ -43,10 +43,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error('Error:', err.message);
   res.status(500).json({
     message: 'Simulated server error',
-    error: err.message,
   });
 });
 
