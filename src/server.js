@@ -44,8 +44,7 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   res.status(500).json({
-    message: 'Simulated server error',
-    error: err.message,
+    message: err.message
   });
 });
 
