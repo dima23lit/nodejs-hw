@@ -1,12 +1,12 @@
 import { Note } from '../models/note.js';
 import createHttpError from 'http-errors';
 
-export const getNotes = async (req, res) => {
+export const getAllNotes = async (req, res) => {
   const notes = await Note.find();
   res.status(200).json(notes);
 };
 
-export const getNotesbyID = async (req, res, next) => {
+export const getNoteById = async (req, res, next) => {
   const { noteId } = req.params;
   const note = await Note.findById(noteId);
 
@@ -31,7 +31,7 @@ export const deleteNote = async (req, res, next) => {
   });
 
   if (!note) {
-    next(createHttpError(404, "Student not found"));
+    next(createHttpError(404, "Note not found"));
     return;
   }
 
@@ -48,7 +48,7 @@ export const updateNote = async (req, res, next) => {
   );
 
   if (!note) {
-    next(createHttpError(404, 'Student not found'));
+    next(createHttpError(404, 'Note not found'));
     return;
   }
 
