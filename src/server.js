@@ -7,7 +7,9 @@ import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { connectMongoDB } from './db/connectMongoDB.js';
+import cookieParser from 'cookie-parser';
 
+import authRoutes from './routes/authRoutes.js';
 import notesRoutes from './routes/notesRoutes.js';
 
 const app = express();
@@ -17,10 +19,12 @@ app.use(express.json({
   type: ['application/json', 'application/vnd.api+json'],
   limit: '100kb',
 }));
+app.use(cookieParser());
 app.use(cors());
 
 const PORT = process.env.PORT ?? 3030;
 
+app.use(authRoutes);
 app.use(notesRoutes);
 
 app.use(notFoundHandler);
