@@ -7,9 +7,9 @@ import { Session } from '../models/session.js';
 export const registerUser = async (req, res) => {
   const { email, password } = req.body;
 
-  const exsitingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ email });
 
-  if (exsitingUser) {
+  if (existingUser) {
     throw createHttpError(400, 'Email in use');
   }
 
@@ -33,13 +33,13 @@ export const loginUser = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw createHttpError(400, 'User not found');
+    throw createHttpError(401, 'User not found');
   };
 
   const isValidPassword = await bcrypt.compare(password, user.password);
 
   if (!isValidPassword) {
-    throw createHttpError(400, 'Invalid credentials');
+    throw createHttpError(401, 'Invalid credentials');
   };
 
   await Session.deleteOne({ userId: user._id });
@@ -86,7 +86,7 @@ export const refreshUserSession = async (req, res) => {
     refreshToken: req.cookies.refreshToken,
   });
 
-  const newSession = await createSession(session._id);
+  const newSession = await createSession(session.userId);
   setSessionCookies(res, newSession);
 
   res.status(200).json({
